@@ -43,6 +43,11 @@ struct DetailView: View {
                     .font(.largeTitle)
                 
                 Spacer()
+                
+                if let date = book.date {
+                    Text("Added at: \(dateFormatter(date))")
+                        .font(.footnote)
+                }
             }
         }
         .navigationBarTitle(Text(book.title ?? "Unknown Book"), displayMode: .inline)
@@ -63,6 +68,13 @@ struct DetailView: View {
         try? moc.save()
         presentationMode.wrappedValue.dismiss()
     }
+    
+    func dateFormatter(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        formatter.dateStyle = .short
+        return formatter.string(from: date)
+    }
 }
 
 struct DetailView_Previews: PreviewProvider {
@@ -75,6 +87,7 @@ struct DetailView_Previews: PreviewProvider {
         book.genre = "Fantasy"
         book.rating = 4
         book.review = "This was a great book; I really enjoyed it."
+        book.date = Date()
         
         return NavigationView {
             DetailView(book: book)
